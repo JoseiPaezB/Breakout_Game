@@ -40,6 +40,7 @@ class MainMenu:
         self.button2_rect = pygame.Rect(300, 400, 200, 50)
         self.button3_rect = pygame.Rect(300, 500, 200, 50)
 
+    #Se añade conectividad a los botones con otras interfaces
     def handle_events(self):
         event = pygame.event.wait()
         if event.type == pygame.QUIT:
@@ -85,7 +86,8 @@ class IndividualMode:
         self.button3_rect = pygame.Rect(300, 400, 200, 50)
         self.button4_rect = pygame.Rect(300, 500, 200, 50)
         self.screen.screen.fill((0, 0, 0))
-
+        
+    #Se añade conectividad a los botones con otras interfaces
     def handle_events(self):
         event = pygame.event.wait()
         if event.type == pygame.QUIT:
@@ -105,7 +107,7 @@ class IndividualMode:
     def update(self):
         pass
       
-        
+    #Se crean los botones de dificultad
     def draw(self):
         pygame.draw.rect(self.screen.screen, (255, 0, 0), self.button1_rect)
         text1 = self.font.render("Beginner", True, (255, 255, 255))
@@ -138,6 +140,7 @@ class oneVone:
         self.button4_rect = pygame.Rect(300, 500, 200, 50)
         self.screen.screen.fill((0, 0, 0))
 
+    #Se añade conectividad a los botones con otras interfaces
     def handle_events(self):
         event = pygame.event.wait()
         if event.type == pygame.QUIT:
@@ -213,17 +216,20 @@ class contrareloj:
         game_loop("contrareloj","Intermediate")
     
     
-    
+# Game loop es la funcion principal del juego que permite inicializar cualquier modo de juego, con cualquier dificultad. Estos dos aspectos se le pasan como parámetros
 def game_loop(gamemode,difficulty): 
    
     pygame.init()
 
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Brick Breaker")
-    
+
+    # se inicializan los objetos bases del juego, como los grupos
     all_sprites = pygame.sprite.Group()
     bricks_group = pygame.sprite.Group()
     power_ups_group = pygame.sprite.Group()
+
+    #se crea el mensaje de Game Over para cuando finalice la partida
     printMessage="Game Over"
     font = pygame.font.SysFont("abadi",50)
     text=font.render(printMessage,True, (255, 255, 255), (0, 0, 0))
@@ -232,7 +238,7 @@ def game_loop(gamemode,difficulty):
 
         
     if(gamemode == "individual"):
-     
+        #Se crean los objetos tomando en cuenta la dificultad y modo de juego
         wall = Wall(0,screen_width,difficulty)
         wall.add_bricks()
         bricks_group.add(wall.bricks)
@@ -246,6 +252,8 @@ def game_loop(gamemode,difficulty):
         running = True
         clock = pygame.time.Clock()
         contador=0
+
+        #El loop que mantiene el juego corriendo, revisa colisiones entre todos los objetos, activa powerUps, y finaliza el juego
         while running and not salir:
             contador+=1
             for event in pygame.event.get():
@@ -306,6 +314,7 @@ def game_loop(gamemode,difficulty):
             clock.tick(fps)
         
     elif (gamemode == "1v1"):
+        #Se crean los objetos tomando en cuenta la dificultad y modo de juego
         bricks_groupbot = pygame.sprite.Group()
         power_ups_groupbot = pygame.sprite.Group()
     
@@ -343,6 +352,8 @@ def game_loop(gamemode,difficulty):
         running = True
         clock = pygame.time.Clock()
         contador=0
+        
+        #El loop que mantiene el juego corriendo, revisa colisiones entre todos los objetos, activa powerUps, y finaliza el juego
         while running and not salir:
             contador+=1
             for event in pygame.event.get():
@@ -450,6 +461,9 @@ def game_loop(gamemode,difficulty):
         clock = pygame.time.Clock()
         contador=0
         tiempo_transcurrido = 0
+
+        #El loop que mantiene el juego corriendo, revisa colisiones entre todos los objetos, activa powerUps, y finaliza el juego cuando se pierde o se acaba el tiempo
+
         while running and not salir:
             contador+=1
             for event in pygame.event.get():
@@ -499,13 +513,13 @@ def game_loop(gamemode,difficulty):
 
             
             
-                
             screen.fill((0, 0, 0))
             
                         
             font = pygame.font.Font(None, 36)
             tiempo_texto = font.render(f"Tiempo: {int(tiempo_transcurrido)-1} segundos", True, (255, 255, 255))
-            
+
+            #Se imprime el tiempo restante en pantalla, y se dibujan los sprites nuevamente
             screen.blit(tiempo_texto, (500, 500))
             all_sprites.draw(screen)
             power_ups_group.draw(screen)
@@ -518,20 +532,20 @@ def game_loop(gamemode,difficulty):
                 break
             
         
-            
+    #se imprime el texto de Game Over en pantalla, luego de 5 segundos elimina todos los objetos dentro de all sprites y limpia la pantalla, para luego ir al menu principal.   
     screen.blit(text,textRect)
     pygame.display.flip()
     time.sleep(5)
     all_sprites.empty()
     screen.fill((0, 0, 0))
     MainMenu(screen)
-       
+
+    #Revisa si el usuario toca la tecla X de la ventana. 
     if salir:
         pygame.quit()
         sys.exit()
-        
+
+#Comandos necesarios para iniciar el juego
 screen = Screen(780, 600, 1, 0)
 screen.run_game()
         
-screen = Screen(780, 600, 1, 0)
-screen.run_game()
